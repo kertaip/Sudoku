@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Sudoku</h1>
+    <div id="mainMenu" class="mainMenu">
+        <div>
+            <h3>New Sudoku</h3>
+            <form id="newGameForm">
+                <label for="difficultyDropDown">Choose a difficulty:</label>
+                <br /><br /><br />
+                <select id="difficultyDropDown">
+                    <option value="Easy" selected="selected">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                    <option value="Extra hard">Extra hard</option>
+                </select>
+                <br /><br />
+
+
+                <input type="submit" value="Start game">
+            </form>
+        </div>
+
+        <div>
+            <h3>Import Sudoku</h3>
+            <form id="importGameForm">
+                <label for="importText">Enter 81 characters, numbers 1-9 and '.' for empty cells</label>
+                <br /><br />
+                <input id="importText" type="text">
+                <br /><br />
+                <input type="submit" value="Import"><br>
+                <p id="validationMessage"></p>
+            </form>
+        </div>
+        <div>
+            <h3>Enter sudoku</h3><input id="enterGameButton" type="button" value="Start">
+        </div>
+
+    </div>
+    <div id="gameArea">
+        <table id="sudokuBoard">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <h3 id="solutionCount">Solution count: 81/</h3>
+        <h3 id="youWon"></h3>
+        <div id="saveBoardDiv">
+            <input id="saveBoardButton" type="button" value="Save game"><br><br>
+        </div>
+
+        <input id="backToMainMenu" type="button" value="Start a new game">
+
+    </div>
+    <script src="sudokuScripts.js"></script>
+    <script>
+        const mainMenu = document.getElementById("mainMenu");
+        const gameArea = document.getElementById("gameArea");
+        const backToMainMenu = document.getElementById("backToMainMenu")
+        const newGameForm = document.getElementById("newGameForm");
+        const importGameForm = document.getElementById("importGameForm");
+        const enterGameButton = document.getElementById("enterGameButton");
+        const saveBoardDiv = document.getElementById("saveBoardDiv");
+        const saveBoardButton = document.getElementById("saveBoardButton");
+        const validationMessage = document.getElementById("validationMessage")
+        const youWonMessage = document.getElementById("youWon");
+
+        console.log(importGameForm)
+        let toggleMenuAndGameVisibility = () => {
+            youWonMessage.innerText = "";
+
+            saveBoardDiv.style.display = "none";
+            validationMessage.style.display = "none";
+            if (getComputedStyle(mainMenu).display == "grid") {
+                mainMenu.style.display = "none";
+                gameArea.style.display = "block";
+
+
+                return;
+            }
+            mainMenu.style.display = "grid";
+            gameArea.style.display = "none";
+
+        }
+
+
+
+        newGameForm.addEventListener("submit", (event) => {
+            let difficulty;
+            event.preventDefault()
+            event.stopPropagation();
+            difficulty = document.getElementById("difficultyDropDown").value;
+            startNewGame(false, difficulty);
+            toggleMenuAndGameVisibility();
+        }
+        )
+
+        importGameForm.addEventListener("submit", (event) => {
+            let importTextField, importText;
+            let isValidInput;
+            let isValidSudoku;
+            let validationMessageValue = "";
+            event.preventDefault()
+            event.stopPropagation();
+
+            importTextField = document.getElementById("importText");
+            importText = importTextField.value;
+            isValidInput = importText.match("[0-9.]{81}") ? true : false;
+
+            if (isValidInput) {
+                isValidSudoku = startNewGame(true, importText);
+            }
+
+            if (!isValidInput || !isValidSudoku) {
+
+                validationMessageValue = "Import text is not a valid Sudoku";
+                validationMessage.style.display = "inline";
+                document.getElementById("validationMessage").innerText = validationMessageValue;
+                return;
+            }
+            toggleMenuAndGameVisibility();
+            importTextField.value = '';
+
+        })
+
+        enterGameButton.addEventListener("click", (event) => {
+            toggleMenuAndGameVisibility();
+            clearBoard();
+            saveBoardDiv.style.display = "inline";
+
+        })
+
+        saveBoardButton.addEventListener("click", (event) => {
+            if (saveBoard()) {
+                saveBoardDiv.style.display = "none";
+            };
+        })
+
+
+
+        backToMainMenu.addEventListener("click", (event) => {
+            toggleMenuAndGameVisibility();
+        })
+
+    </script>
+</body>
+
+</html>

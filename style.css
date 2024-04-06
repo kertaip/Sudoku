@@ -1,0 +1,89 @@
+h1, h3{
+  text-align: center;
+}
+
+
+#gameArea{
+  display: none;
+  text-align: center;
+}
+
+
+.mainMenu {
+  display: grid;
+  grid-template-columns: 20% 20% 20%;
+  justify-content: center;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.candidate-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  font-size: 8px;
+
+}
+
+#validationMessage {
+  color: red;
+}
+
+#youWon {
+  color: green;
+}
+
+
+
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+  border: 3px solid #000;
+}
+
+td {
+  width: 30px;
+  max-width: 30px;
+  height: 30px;
+  max-height: 30px;
+  text-align: center;
+  border: 1px solid #000;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+
+td.given {
+  background-color: #eee;
+  color: darkblue;
+}
+
+td.incorrect{
+  background-color: #de3e3e;
+}
+
+
+td:nth-child(3n) {
+  border-right: 2px solid #000;
+}
+
+tr:nth-child(3n) td {
+  border-bottom: 2px solid #000;
+}
+
+td > input {
+  width: 80%; /* Adjust the width as needed */
+  height: 80%; /* Adjust the height as needed */
+  font-size: 10px; /* Adjust the font size as needed */
+  text-align: center;
+  border: none; /* Remove input border */
+  margin: auto; /* Center the input */
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Remove arrow in Webkit browsers */
+  margin: 0; /* Additional styles for Webkit */
+}
+
+
